@@ -58,18 +58,18 @@ jobs:
           test-packages: trajectory_collection
       - name: Upload documentation
         # Only run for one configuration and on origin master branch
-        if: matrix.os == 'ubuntu-22.04' && matrix.build-type == 'RelWithDebInfo' && matrix.mc-rtc-version == 'head' && github.repository_owner == 'isri-aist' && github.ref == 'refs/heads/master'
+        if: matrix.os == 'ubuntu-22.04' && matrix.build-type == 'RelWithDebInfo' && matrix.mc-rtc-version == 'head' && github.repository_owner == 'chuoru'
         run: |
           set -e
           set -x
           cd ${GITHUB_WORKSPACE}/colcon_ws/src/${{ github.repository }}
-          git config --global user.name "Masaki Murooka"
-          git config --global user.email "m-murooka@aist.go.jp"
-          git remote set-url origin "https://mmurooka:${{ secrets.CI_TOKEN }}@github.com/isri-aist/TrajectoryCollection"
+          git config --global user.name "chuoru"
+          git config --global user.email "chuoru@github.com"
+          git remote set-url origin "https://chuoru:${{ secrets.CI_TOKEN }}@github.com/chuoru/TrajectoryCollection"
           git fetch --depth=1 origin gh-pages:gh-pages
           git checkout --quiet gh-pages
           rm -rf doxygen/ cmake/
-          cp -r ${GITHUB_WORKSPACE}/colcon_ws/build/trajectory_collection/doc/html/ doxygen
+          cp -r ${GITHUB_WORKSPACE}/colcon_ws/build/trajectory_collection/doc/doxygen-html/ doxygen
           git add doxygen
           git_status=`git status -s`
           if test -n "$git_status"; then
