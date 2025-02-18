@@ -43,7 +43,6 @@ jobs:
           set -x
           if [ "${{ matrix.os }}" == "ubuntu-22.04" ] && \
              [ "${{ matrix.build-type }}" == "RelWithDebInfo" ] && \
-             [ "${{ matrix.standalone }}" == "colcon" ] &&  \
              [ "${{ github.repository_owner }}" == "chuoru" ]
           then
             echo "UPLOAD_DOCUMENTATION=true" >> $GITHUB_ENV
