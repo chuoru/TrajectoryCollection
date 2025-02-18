@@ -37,6 +37,20 @@ jobs:
             mc-rtc-version: stable
     runs-on: ${{ matrix.os }}
     steps:
+      - name: Setup environment variables
+        run: |
+          set -e
+          set -x
+          if [ "${{ matrix.os }}" == "ubuntu-22.04" ] && \
+             [ "${{ matrix.build-type }}" == "RelWithDebInfo" ] && \
+             [ "${{ matrix.standalone }}" == "colcon" ] &&  \
+             [ "${{ github.repository_owner }}" == "chuoru" ]
+          then
+            echo "UPLOAD_DOCUMENTATION=true" >> $GITHUB_ENV
+            sudo apt-get install -qq doxygen graphviz
+          else
+            echo "UPLOAD_DOCUMENTATION=false" >> $GITHUB_ENV
+          fi
       - name: Install dependencies
         uses: jrl-umi3218/github-actions/install-dependencies@master
         with:
@@ -53,7 +67,7 @@ jobs:
         uses: jrl-umi3218/github-actions/build-colcon-project@master
         with:
           build-type: ${{ matrix.build-type }}
-          cmake-args: -DUSE_ROS2=ON
+          cmake-args: -DUSE_ROS2=ON -DINSTALL_DOCUMENTATION=${{ env.UPLOAD_DOCUMENTATION }}
           build-packages: trajectory_collection
           test-packages: trajectory_collection
       - name: Upload documentation
